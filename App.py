@@ -9,11 +9,12 @@ from io import BytesIO
 import textwrap
 from PIL import ImageFont
 import re
+import os
 
 
-# Replace with your OpenAI API key
-api_key = "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"
+api_key = os.environ["OPENAI_API_KEY"]
 openai.api_key = api_key
+
 
 
 # Define necessary elements
