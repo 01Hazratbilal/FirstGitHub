@@ -138,25 +138,25 @@ if st.button("Generate Job Description"):
     st.download_button(label="Download as PDF", data=pdf_bytes, file_name="job_description.pdf")
 
 
-    img = Image.new("RGB", (800, 1200), color="white")
-    d = ImageDraw.Draw(img)
-    x, y = 10, 10
+#     img = Image.new("RGB", (800, 1200), color="white")
+#     d = ImageDraw.Draw(img)
+#     x, y = 10, 10
     
-    # Get the absolute path of the current directory
-    dir_path = os.path.abspath(os.path.dirname(__file__))
+#     # Get the absolute path of the current directory
+#     dir_path = os.path.abspath(os.path.dirname(__file__))
 
-    # Use the absolute path to load the font file
-    font_path = os.path.join(dir_path, 'arial.ttf')
-    font = ImageFont.truetype(font_path, 16)
+#     # Use the absolute path to load the font file
+#     font_path = os.path.join(dir_path, 'arial.ttf')
+#     font = ImageFont.truetype(font_path, 16)
 
-    for paragraph in paragraphs:
-        lines = textwrap.wrap(paragraph, width=50)
-        for line in lines:
-            d.text((x, y), line, font=font, fill="black")
-            y += 20
-        y += 10
+#     for paragraph in paragraphs:
+#         lines = textwrap.wrap(paragraph, width=50)
+#         for line in lines:
+#             d.text((x, y), line, font=font, fill="black")
+#             y += 20
+#         y += 10
 
-    img_bytes = BytesIO()
-    img.save(img_bytes, "PNG")
-    img_bytes.seek(0)
-    st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
+#     img_bytes = BytesIO()
+#     img.save(img_bytes, "PNG")
+#     img_bytes.seek(0)
+#     st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
