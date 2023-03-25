@@ -142,7 +142,7 @@ if st.button("Generate Job Description"):
     img = Image.new("RGB", (800, 1200), color="white")
     d = ImageDraw.Draw(img)
     x, y = 10, 10
-    font = ImageFont.truetype("arial.ttf", 16)  # Change the font path if needed
+   font = ImageFont.truetype("./fonts/arial.ttf", 16)
 
     for paragraph in paragraphs:
         lines = textwrap.wrap(paragraph, width=50)
