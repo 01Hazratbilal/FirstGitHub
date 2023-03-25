@@ -1,0 +1,8 @@
+import os
+import shutil
+
+if not os.path.exists("./fonts"):
+    os.makedirs("./fonts")
+
+if not os.path.exists("./fonts/arial.ttf"):
+    shutil.copy2("arial.ttf", "./fonts/arial.ttf")
