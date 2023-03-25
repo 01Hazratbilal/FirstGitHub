@@ -142,7 +142,11 @@ if st.button("Generate Job Description"):
     d = ImageDraw.Draw(img)
     x, y = 10, 10
     
-    font_path = os.path.abspath("arial.ttf")
+    # Get the absolute path of the current directory
+    dir_path = os.path.abspath(os.path.dirname(__file__))
+
+    # Use the absolute path to load the font file
+    font_path = os.path.join(dir_path, 'arial.ttf')
     font = ImageFont.truetype(font_path, 16)
 
     for paragraph in paragraphs:
