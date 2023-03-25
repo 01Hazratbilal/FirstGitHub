@@ -12,10 +12,8 @@ import re
 import os
 
 
-# Replace with your OpenAI API key
-api_key = "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"
+api_key = os.environ.get('OPENAI_API_KEY')
 openai.api_key = api_key
-
 
 
 # Define necessary elements
