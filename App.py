@@ -87,7 +87,7 @@ for element in additional_elements_added:
 
 # Generate job description
 if st.button("Generate Job Description"):
-    prompt = "Create well structured and detailed job description. Use headings names (if given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
+    prompt = "Create well structured and detailed job description. Use headings names (don't use if not given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
     
     for key, value in necessary_inputs.items():
         prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
