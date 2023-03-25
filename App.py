@@ -11,7 +11,6 @@ from PIL import ImageFont
 import re
 import os
 
-
 api_key = os.environ.get('OPENAI_API_KEY')
 openai.api_key = api_key
 
@@ -142,7 +141,9 @@ if st.button("Generate Job Description"):
     img = Image.new("RGB", (800, 1200), color="white")
     d = ImageDraw.Draw(img)
     x, y = 10, 10
-    font = ImageFont.truetype("arial.ttf", 16)
+    
+    font_path = os.path.join(os.path.dirname(__file__), 'arial.ttf')
+    font = ImageFont.truetype(font_path, 16)
 
     for paragraph in paragraphs:
         lines = textwrap.wrap(paragraph, width=50)
