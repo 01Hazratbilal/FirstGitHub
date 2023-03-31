@@ -123,7 +123,7 @@ if st.button("Generate Job Description"):
         temperature=0.7,
     )
     
-    job_description = response.choices[0].text.strip()
+job_description = response.choices[0].text.strip()
 
 
 # Remove HTML tags from the job description
