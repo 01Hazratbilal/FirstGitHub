@@ -10,6 +10,40 @@ import textwrap
 from PIL import ImageFont
 import re
 import os
+from googletrans import Translator
+
+# Add translator
+translator = Translator()
+
+# Language options
+languages = {
+    "English": "en",
+    "German": "de",
+    "Russian": "ru",
+    "Chinese": "zh-CN"
+}
+# Create empty space on the left side
+left_space = st.empty()
+# Create columns
+col1, col2 = st.columns((8, 2))
+# Add the dropdown menu to the right column
+# Add the dropdown menu to the right column
+selected_language = col2.selectbox("Select language", list(languages.keys()), index=0, key="language_select")
+# Clear the empty space after adding the dropdown menu
+left_space.empty()
+
+
+
+def translate_text(text, target_language):
+    if target_language != "en":
+        translated_text = translator.translate(text, dest=target_language).text
+        return translated_text
+    else:
+        return text
+
+# Change the following text based on the selected language
+st.title(translate_text("Job Description Generator", languages[selected_language]))
+
 
 api_key = os.environ.get('OPENAI_API_KEY')
 openai.api_key = api_key
@@ -68,10 +102,11 @@ additional_elements = [
 import streamlit as st
 
 # Main screen for necessary elements
-st.header("Job Description")
+st.header(translate_text("Job Description", languages[selected_language]))
 necessary_inputs = {}
 for element in necessary_elements:
-    necessary_inputs[element] = st.text_input(element)
+    translated_element = translate_text(element, languages[selected_language])
+    necessary_inputs[element] = st.text_input(translated_element)
 
 # Sidebar for additional elements
 st.sidebar.header("Additional Elements")
@@ -81,12 +116,13 @@ additional_elements_added = st.sidebar.multiselect(
 
 additional_inputs = {}
 for element in additional_elements_added:
-    additional_inputs[element] = st.text_input(element)
+    translated_element = translate_text(element, languages[selected_language])
+    additional_inputs[element] = st.text_input(translated_element)
 
 
 # Generate job description
 if st.button("Generate Job Description"):
-    prompt = "Create well structured and detailed job description. Use headings names (don't use if not given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
+    prompt = "Create well structured and detailed job description. Use headings names (if given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
     
     for key, value in necessary_inputs.items():
         prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
@@ -138,25 +174,19 @@ if st.button("Generate Job Description"):
     st.download_button(label="Download as PDF", data=pdf_bytes, file_name="job_description.pdf")
 
 
-#     img = Image.new("RGB", (800, 1200), color="white")
-#     d = ImageDraw.Draw(img)
-#     x, y = 10, 10
-    
-#     # Get the absolute path of the current directory
-#     dir_path = os.path.abspath(os.path.dirname(__file__))
+    img = Image.new("RGB", (800, 1200), color="white")
+    d = ImageDraw.Draw(img)
+    x, y = 10, 10
+    font = ImageFont.truetype("arial.ttf", 16)  # Change the font path if needed
 
-#     # Use the absolute path to load the font file
-#     font_path = os.path.join(dir_path, 'arial.ttf')
-#     font = ImageFont.truetype(font_path, 16)
+    for paragraph in paragraphs:
+        lines = textwrap.wrap(paragraph, width=50)
+        for line in lines:
+            d.text((x, y), line, font=font, fill="black")
+            y += 20
+        y += 10
 
-#     for paragraph in paragraphs:
-#         lines = textwrap.wrap(paragraph, width=50)
-#         for line in lines:
-#             d.text((x, y), line, font=font, fill="black")
-#             y += 20
-#         y += 10
-
-#     img_bytes = BytesIO()
-#     img.save(img_bytes, "PNG")
-#     img_bytes.seek(0)
-#     st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
+    img_bytes = BytesIO()
+    img.save(img_bytes, "PNG")
+    img_bytes.seek(0)
+    st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
