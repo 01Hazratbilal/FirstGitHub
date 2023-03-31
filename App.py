@@ -12,6 +12,9 @@ import re
 import os
 from googletrans import Translator
 
+api_key = os.environ.get('OPENAI_API_KEY')
+openai.api_key = api_key
+
 # Add translator
 translator = Translator()
 
