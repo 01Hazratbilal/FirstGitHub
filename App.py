@@ -10,6 +10,7 @@ import textwrap
 from PIL import ImageFont
 import re
 import os
+import googletrans
 from googletrans import Translator
 
 # Add translator
