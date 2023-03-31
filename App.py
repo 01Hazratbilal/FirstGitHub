@@ -10,7 +10,6 @@ import textwrap
 from PIL import ImageFont
 import re
 import os
-import googletrans
 from googletrans import Translator
 
 # Add translator
@@ -121,6 +120,16 @@ for element in additional_elements_added:
     additional_inputs[element] = st.text_input(translated_element)
 
 
+font_styles = {
+    "Classic": "Times New Roman",
+    "Modern": "Arial",
+    "Professional": "Calibri",
+    "Other": "Courier New"
+}
+st.sidebar.header("Font Style")
+selected_font_style = st.sidebar.radio("Choose a font style", options=list(font_styles.keys()), index=0, key="font_style_select")
+
+
 # Generate job description
 if st.button("Generate Job Description"):
     prompt = "Create well structured and detailed job description. Use headings names (if given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
@@ -178,7 +187,8 @@ if st.button("Generate Job Description"):
     img = Image.new("RGB", (800, 1200), color="white")
     d = ImageDraw.Draw(img)
     x, y = 10, 10
-    font = ImageFont.truetype("arial.ttf", 16)  # Change the font path if needed
+    font = ImageFont.truetype(f"{font_styles[selected_font_style]}.ttf", 16)  # Change the font path if needed
+
 
     for paragraph in paragraphs:
         lines = textwrap.wrap(paragraph, width=50)
