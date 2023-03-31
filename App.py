@@ -160,7 +160,7 @@ if st.button("Generate Job Description"):
         formatted_description += f"{paragraph}\n\n"
 
     # Display the formatted job description
-    st.write(f"<div style='text-align: center;'><h2>Job Description</h2></div><br><div>{job_description_no_html}</div>", unsafe_allow_html=True)
+    st.write(f"<div style='text-align: center;'><h2>Job Description</h2></div><br><div style='font-family: {font_styles[selected_font_style]};'>{job_description_no_html}</div>", unsafe_allow_html=True)
 
     # Save the job description as a Word document
     doc = docx.Document()
