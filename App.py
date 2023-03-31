@@ -4,10 +4,9 @@ import docx
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib import styles
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 from io import BytesIO
 import textwrap
-from PIL import ImageFont
 import re
 import os
 from googletrans import Translator
@@ -25,17 +24,12 @@ languages = {
     "Russian": "ru",
     "Chinese": "zh-CN"
 }
-# Create empty space on the left side
-left_space = st.empty()
+
 # Create columns
 col1, col2 = st.columns((8, 2))
-# Add the dropdown menu to the right column
+
 # Add the dropdown menu to the right column
 selected_language = col2.selectbox("Select language", list(languages.keys()), index=0, key="language_select")
-# Clear the empty space after adding the dropdown menu
-left_space.empty()
-
-
 
 def translate_text(text, target_language):
     if target_language != "en":
@@ -43,14 +37,6 @@ def translate_text(text, target_language):
         return translated_text
     else:
         return text
-
-# Change the following text based on the selected language
-st.title(translate_text("Job Description Generator", languages[selected_language]))
-
-
-api_key = os.environ.get('OPENAI_API_KEY')
-openai.api_key = api_key
-
 
 # Define necessary elements
 necessary_elements = [
@@ -68,7 +54,6 @@ necessary_elements = [
     "Contact Information",
     "Equal Employment Opportunity Statement"
 ]
-
 
 # Define additional elements
 additional_elements = [
@@ -101,11 +86,8 @@ additional_elements = [
     "Employee Referral Program"
 ]
 
-
-import streamlit as st
-
 # Main screen for necessary elements
-st.header(translate_text("Job Description", languages[selected_language]))
+st.title(translate_text("Job Description Generator", languages[selected_language]))
 necessary_inputs = {}
 for element in necessary_elements:
     translated_element = translate_text(element, languages[selected_language])
@@ -123,17 +105,6 @@ for element in additional_elements_added:
     additional_inputs[element] = st.text_input(translated_element)
 
 
-font_styles = {
-    "Classic": "Times New Roman",
-    "Modern": "Arial",
-    "Professional": "Calibri",
-    "Other": "Courier New"
-}
-st.sidebar.header("Font Style")
-selected_font_style = st.sidebar.radio("Choose a font style", options=list(font_styles.keys()), index=0, key="font_style_select")
-
-
-# Generate job description
 if st.button("Generate Job Description"):
     prompt = "Create well structured and detailed job description. Use headings names (if given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
     
@@ -154,53 +125,53 @@ if st.button("Generate Job Description"):
     
     job_description = response.choices[0].text.strip()
 
-    # Remove HTML tags from the job description
-    job_description_no_html = re.sub(r'<[^>]*>', '', job_description)
 
-    paragraphs = job_description_no_html.split("\n\n")
-    formatted_description = ""
-    for paragraph in paragraphs:
-        formatted_description += f"{paragraph}\n\n"
+# Remove HTML tags from the job description
+job_description_no_html = re.sub(r'<[^>]*>', '', job_description)
 
-    # Display the formatted job description
-    st.write(f"<div style='text-align: center;'><h2>Job Description</h2></div><br><div style='font-family: {font_styles[selected_font_style]};'>{job_description_no_html}</div>", unsafe_allow_html=True)
+paragraphs = job_description_no_html.split("\n\n")
+formatted_description = ""
+for paragraph in paragraphs:
+    formatted_description += f"{paragraph}\n\n"
 
-    # Save the job description as a Word document
-    doc = docx.Document()
-    for paragraph in paragraphs:
-        doc.add_paragraph(paragraph)
-    doc_bytes = BytesIO()
-    doc.save(doc_bytes)
-    doc_bytes.seek(0)
-    st.download_button(label="Download as Word", data=doc_bytes, file_name="job_description.docx")
-
-    # Save the job description as a PDF document
-    style = styles.getSampleStyleSheet()
-    pdf_buffer = BytesIO()
-    pdf_doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
-    pdf_contents = []
-    for paragraph in paragraphs:
-        pdf_contents.append(Paragraph(paragraph, style['Normal']))
-    pdf_doc.build(pdf_contents)
-    pdf_bytes = pdf_buffer.getvalue()
-    pdf_buffer.close()
-    st.download_button(label="Download as PDF", data=pdf_bytes, file_name="job_description.pdf")
+# Display the formatted job description
+st.write(f"<div style='text-align: center;'><h2>Job Description</h2></div><br>{job_description_no_html}", unsafe_allow_html=True)
 
 
-    img = Image.new("RGB", (800, 1200), color="white")
-    d = ImageDraw.Draw(img)
-    x, y = 10, 10
-    font = ImageFont.truetype(f"{font_styles[selected_font_style]}.ttf", 16)  # Change the font path if needed
+# Save the job description as a Word document
+doc = docx.Document()
+for paragraph in paragraphs:
+    doc.add_paragraph(paragraph)
+doc_bytes = BytesIO()
+doc.save(doc_bytes)
+doc_bytes.seek(0)
+st.download_button(label="Download as Word", data=doc_bytes, file_name="job_description.docx")
 
+# Save the job description as a PDF document
+style = styles.getSampleStyleSheet()
+pdf_buffer = BytesIO()
+pdf_doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
+pdf_contents = []
+for paragraph in paragraphs:
+    pdf_contents.append(Paragraph(paragraph, style['Normal']))
+pdf_doc.build(pdf_contents)
+pdf_bytes = pdf_buffer.getvalue()
+pdf_buffer.close()
+st.download_button(label="Download as PDF", data=pdf_bytes, file_name="job_description.pdf")
 
-    for paragraph in paragraphs:
-        lines = textwrap.wrap(paragraph, width=50)
-        for line in lines:
-            d.text((x, y), line, font=font, fill="black")
-            y += 20
-        y += 10
+# Save the job description as an image
+img = Image.new("RGB", (800, 1200), color="white")
+d = ImageDraw.Draw(img)
+x, y = 10, 10
 
-    img_bytes = BytesIO()
-    img.save(img_bytes, "PNG")
-    img_bytes.seek(0)
-    st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
+for paragraph in paragraphs:
+    lines = textwrap.wrap(paragraph, width=50)
+    for line in lines:
+        d.text((x, y), line, fill="black")
+        y += 20
+    y += 10
+
+img_bytes = BytesIO()
+img.save(img_bytes, "PNG")
+img_bytes.seek(0)
+st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
