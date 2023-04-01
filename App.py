@@ -86,19 +86,6 @@ additional_elements = [
     "Employee Referral Program"
 ]
 
-# Define required elements
-required_elements = [
-    "Job Title",
-    "Job Type",
-    "Job Location",
-    "Job Summary",
-    "Job Responsibilities",
-    "Required Qualifications",
-    "Benefits",
-    "Company Overview",
-    "Contact Information",
-]
-
 # Main screen for necessary elements
 st.title(translate_text("Job Description Generator", languages[selected_language]))
 necessary_inputs = {}
@@ -124,31 +111,26 @@ style_prompt = st.text_area(translate_text("What type of Job Description you wan
 
 prompt = ""
 if st.button("Generate Job Description"):
-    # Check if all required fields are filled
-    all_required_filled = all(necessary_inputs[element] for element in required_elements)
+    # Modify the OpenAI API prompt based on the text from the text area
+    style_prompt = f"Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets. {style_prompt}"
+    if style_prompt:
+        prompt += f"Write the job description in the following style: {style_prompt}\n\n"
     
-    if not all_required_filled:
-        st.warning("Please fill in all required fields.")
-    else:
-        # Modify the OpenAI API prompt based on the text from the text area
-        style_prompt = f"Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets. {style_prompt}"
-        if style_prompt:
-            prompt += f"Write the job description in the following style: {style_prompt}\n\n"
+    
+    for key, value in necessary_inputs.items():
+        prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
         
-        for key, value in necessary_inputs.items():
-            prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
+    for key, value in additional_inputs.items():
+        prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
         
-        for key, value in additional_inputs.items():
-            prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
-        
-        response = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=prompt,
-            max_tokens=1024,
-            n=1,
-            stop=None,
-            temperature=0.7,
-        )
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
 
     job_description = response.choices[0].text.strip()
 
