@@ -105,9 +105,11 @@ for element in additional_elements_added:
     additional_inputs[element] = st.text_input(translated_element)
     
    
+# Add text area prompt
 st.subheader(translate_text("Job Description Style", languages[selected_language]))
 style_prompt = st.text_area(translate_text("What type of Job Description you want?", languages[selected_language]), "")
 
+prompt = ""
 if st.button("Generate Job Description"):
     # Modify the OpenAI API prompt based on the text from the text area
     if style_prompt:
