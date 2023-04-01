@@ -134,22 +134,21 @@ if st.button("Generate Job Description"):
         style_prompt = f"Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets. {style_prompt}"
         if style_prompt:
             prompt += f"Write the job description in the following style: {style_prompt}\n\n"
-            
-            
-    for key, value in necessary_inputs.items():
-        prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
         
-    for key, value in additional_inputs.items():
-        prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
+        for key, value in necessary_inputs.items():
+            prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
         
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.7,
-    )
+        for key, value in additional_inputs.items():
+            prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
+        
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.7,
+        )
 
     job_description = response.choices[0].text.strip()
 
