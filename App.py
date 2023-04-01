@@ -112,6 +112,7 @@ style_prompt = st.text_area(translate_text("What type of Job Description you wan
 prompt = ""
 if st.button("Generate Job Description"):
     # Modify the OpenAI API prompt based on the text from the text area
+    style_prompt = f"Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets. {style_prompt}"
     if style_prompt:
         prompt += f"Write the job description in the following style: {style_prompt}\n\n"
     
