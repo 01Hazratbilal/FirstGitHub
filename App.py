@@ -52,7 +52,6 @@ necessary_elements = [
     "Application Deadline",
     "Company Overview",
     "Contact Information",
-    "Equal Employment Opportunity Statement"
 ]
 
 # Define additional elements
@@ -62,6 +61,7 @@ additional_elements = [
     "Travel Requirements",
     "Physical Demands",
     "Working Conditions",
+    "Equal Employment Opportunity Statement",
     "Training and Development Opportunities",
     "Performance Expectations",
     "Key Performance Indicators (KPIs)",
