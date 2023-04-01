@@ -85,6 +85,18 @@ additional_elements = [
     "Onboarding Process",
     "Employee Referral Program"
 ]
+required_elements = [
+    "Job Title",
+    "Job Type",
+    "Job Location",
+    "Job Summary",
+    "Job Responsibilities",
+    "Required Qualifications",
+    "Benefits",
+    "Company Overview",
+    "Contact Information"
+]
+
 
 # Main screen for necessary elements
 st.title(translate_text("Job Description Generator", languages[selected_language]))
@@ -110,6 +122,13 @@ st.subheader(translate_text("Job Description Style", languages[selected_language
 style_prompt = st.text_area(translate_text("What type of Job Description you want?", languages[selected_language]), placeholder="e.g. Write the Job Description for an Older Audience Ground that are Looking for saved Jobs and have a lot of Experience.")
 
 prompt = ""
+all_required_filled = all(necessary_inputs[element] != "" for element in required_elements)
+
+# Disable the button if not all required fields are filled
+if not all_required_filled:
+    st.warning("Please fill in all required fields.")
+    st.stop()
+
 if st.button("Generate Job Description"):
     # Modify the OpenAI API prompt based on the text from the text area
     style_prompt = f"Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets. {style_prompt}"
