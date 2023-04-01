@@ -132,7 +132,7 @@ if not all_required_filled:
     st.stop()
 
 if st.button("Generate Job Description"):
-    with st.spinner("Generating Job Description..."):
+  with st.spinner("Generating Job Description..."):
     # Modify the OpenAI API prompt based on the text from the text area
     style_prompt = f"Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets. {style_prompt}"
     if style_prompt:
