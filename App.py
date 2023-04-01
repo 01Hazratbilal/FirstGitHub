@@ -88,6 +88,19 @@ additional_elements = [
 
 # Main screen for necessary elements
 st.title(translate_text("Job Description Generator", languages[selected_language]))
+st.header(translate_text("Audience", languages[selected_language]))
+older_audience = st.checkbox(translate_text("Write the JD for an older audience with a lot of experience", languages[selected_language]))
+younger_audience = st.checkbox(translate_text("Write the JD for a younger audience in a motivational style", languages[selected_language]))
+
+# Audience preferences
+st.header(translate_text("Audience", languages[selected_language]))
+older_audience = st.checkbox(translate_text("Write the JD for an older audience with a lot of experience", languages[selected_language]))
+younger_audience = st.checkbox(translate_text("Write the JD for a younger audience in a motivational style", languages[selected_language]))
+
+# Custom prompt input
+st.header(translate_text("Custom Prompt", languages[selected_language]))
+custom_prompt = st.text_area(translate_text("Enter your own prompt for the job description", languages[selected_language]), "")
+
 necessary_inputs = {}
 for element in necessary_elements:
     translated_element = translate_text(element, languages[selected_language])
@@ -113,6 +126,16 @@ if st.button("Generate Job Description"):
         
     for key, value in additional_inputs.items():
         prompt += f"<b style='font-size: 1.3em;'>{key}:</b> {value}\n\n"
+        
+if older_audience:
+    prompt += "Write the job description for an older audience with a lot of experience.\n\n"
+    
+if younger_audience:
+    prompt += "Write the job description for a younger audience in a motivational style.\n\n"
+
+if custom_prompt:
+    prompt += custom_prompt + "\n\n"
+
         
     response = openai.Completion.create(
         engine="text-davinci-002",
