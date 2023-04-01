@@ -125,52 +125,52 @@ if st.button("Generate Job Description"):
 
     job_description = response.choices[0].text.strip()
 
-# Remove HTML tags from the job description
-job_description_no_html = re.sub(r'<[^>]*>', '', job_description)
+    # Remove HTML tags from the job description
+    job_description_no_html = re.sub(r'<[^>]*>', '', job_description)
 
-paragraphs = job_description_no_html.split("\n\n")
-formatted_description = ""
-for paragraph in paragraphs:
-    formatted_description += f"{paragraph}\n\n"
+    paragraphs = job_description_no_html.split("\n\n")
+    formatted_description = ""
+    for paragraph in paragraphs:
+        formatted_description += f"{paragraph}\n\n"
 
-# Display the formatted job description
-st.write(f"<div style='text-align: center;'><h2>Job Description</h2></div><br>{job_description_no_html}", unsafe_allow_html=True)
+    # Display the formatted job description
+    st.write(f"<div style='text-align: center;'><h2>Job Description</h2></div><br>{job_description_no_html}", unsafe_allow_html=True)
 
 
-# Save the job description as a Word document
-doc = docx.Document()
-for paragraph in paragraphs:
-    doc.add_paragraph(paragraph)
-doc_bytes = BytesIO()
-doc.save(doc_bytes)
-doc_bytes.seek(0)
-st.download_button(label="Download as Word", data=doc_bytes, file_name="job_description.docx")
+    # Save the job description as a Word document
+    doc = docx.Document()
+    for paragraph in paragraphs:
+        doc.add_paragraph(paragraph)
+    doc_bytes = BytesIO()
+    doc.save(doc_bytes)
+    doc_bytes.seek(0)
+    st.download_button(label="Download as Word", data=doc_bytes, file_name="job_description.docx")
 
-# Save the job description as a PDF document
-style = styles.getSampleStyleSheet()
-pdf_buffer = BytesIO()
-pdf_doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
-pdf_contents = []
-for paragraph in paragraphs:
-    pdf_contents.append(Paragraph(paragraph, style['Normal']))
-pdf_doc.build(pdf_contents)
-pdf_bytes = pdf_buffer.getvalue()
-pdf_buffer.close()
-st.download_button(label="Download as PDF", data=pdf_bytes, file_name="job_description.pdf")
+    # Save the job description as a PDF document
+    style = styles.getSampleStyleSheet()
+    pdf_buffer = BytesIO()
+    pdf_doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
+    pdf_contents = []
+    for paragraph in paragraphs:
+        pdf_contents.append(Paragraph(paragraph, style['Normal']))
+    pdf_doc.build(pdf_contents)
+    pdf_bytes = pdf_buffer.getvalue()
+    pdf_buffer.close()
+    st.download_button(label="Download as PDF", data=pdf_bytes, file_name="job_description.pdf")
 
-# Save the job description as an image
-img = Image.new("RGB", (800, 1200), color="white")
-d = ImageDraw.Draw(img)
-x, y = 10, 10
+    # Save the job description as an image
+    img = Image.new("RGB", (800, 1200), color="white")
+    d = ImageDraw.Draw(img)
+    x, y = 10, 10
 
-for paragraph in paragraphs:
-    lines = textwrap.wrap(paragraph, width=50)
-    for line in lines:
-        d.text((x, y), line, fill="black")
-        y += 20
-    y += 10
+    for paragraph in paragraphs:
+        lines = textwrap.wrap(paragraph, width=50)
+        for line in lines:
+            d.text((x, y), line, fill="black")
+            y += 20
+        y += 10
 
-img_bytes = BytesIO()
-img.save(img_bytes, "PNG")
-img_bytes.seek(0)
-st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
+    img_bytes = BytesIO()
+    img.save(img_bytes, "PNG")
+    img_bytes.seek(0)
+    st.download_button(label="Download as Image", data=img_bytes, file_name="job_description.png")
