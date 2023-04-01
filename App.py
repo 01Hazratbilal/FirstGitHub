@@ -104,6 +104,25 @@ for element in additional_elements_added:
     translated_element = translate_text(element, languages[selected_language])
     additional_inputs[element] = st.text_input(translated_element)
 
+    
+# Add radio buttons and text area prompt
+st.subheader(translate_text("Job Description Style", languages[selected_language]))
+style_options = {
+    translate_text("Older audience with experience", languages[selected_language]): "older",
+    translate_text("Young audience in a motivational style", languages[selected_language]): "young"
+}
+selected_style = st.radio("", list(style_options.keys()), key="style_select")
+style_prompt = st.text_area(translate_text("What type of Job Description you want?", languages[selected_language]), "")
+
+# Modify the OpenAI API prompt based on the selected radio button or the text from the text area
+if style_prompt:
+    prompt += f"Write the job description in the following style: {style_prompt}\n\n"
+else:
+    if style_options[selected_style] == "older":
+        prompt += "Write the job description for an older audience that is looking for stable jobs and has a lot of experience.\n\n"
+    elif style_options[selected_style] == "young":
+        prompt += "Write the job description for a young audience in a motivational style.\n\n"
+    
 
 if st.button("Generate Job Description"):
     prompt = "Create well structured and detailed job description. Use headings names (if given), use bullet points, numbering, or alphabets when needed. Do make the heading bold. Include only the provided information:\n\n"
