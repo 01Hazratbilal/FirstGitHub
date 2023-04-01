@@ -107,7 +107,7 @@ for element in additional_elements_added:
    
 # Add text area prompt
 st.subheader(translate_text("Job Description Style", languages[selected_language]))
-style_prompt = st.text_area(translate_text("What type of Job Description you want?", languages[selected_language]), "")
+style_prompt = st.text_area(translate_text("What type of Job Description you want?", languages[selected_language]), placeholder="Make a well-structured Job Description. Bold the headings. Use bullet points, numbers, or alphabets.")
 
 prompt = ""
 if st.button("Generate Job Description"):
