@@ -103,6 +103,8 @@ st.title(translate_text("Job Description Generator", languages[selected_language
 necessary_inputs = {}
 for element in necessary_elements:
     translated_element = translate_text(element, languages[selected_language])
+    if element in required_elements:
+        translated_element += translate_text(" (required)", languages[selected_language])
     necessary_inputs[element] = st.text_input(translated_element)
 
 # Sidebar for additional elements
