@@ -1,1 +1,7 @@
 
+openai
+python-docx
+reportlab
+Pillow
+textwrap3
+googletrans==4.0.0-rc1
