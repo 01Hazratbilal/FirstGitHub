@@ -1,4 +1,4 @@
-pycairo
+
 openai
 python-docx
 reportlab
